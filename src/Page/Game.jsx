@@ -37,11 +37,7 @@ export function Game() {
             }, 1000);
 
             const foodTimer = setInterval(() => {
-                // Calculer le nombre total de survivants sur la carte
-                const totalSurvivorsOnMap = map.reduce((total, row) => {
-                    return total + row.reduce((rowTotal, cell) => rowTotal + (cell.survivors || 0), 0);
-                }, 0);
-                consumeMeat(totalSurvivorsOnMap);
+                consumeMeat(resources.survivor);
             }, 10000);
 
             const resourceTimer = setInterval(() => {
@@ -54,7 +50,7 @@ export function Game() {
                 clearInterval(resourceTimer);
             };
         }
-    }, [isGameOver, gameStartTime, setSurvivedTime, consumeMeat, produceResources, map]);
+    }, [isGameOver, gameStartTime, setSurvivedTime, consumeMeat, produceResources, resources.survivor]);
 
     const handleRestart = () => {
         resetGame();

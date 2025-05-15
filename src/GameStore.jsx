@@ -70,12 +70,15 @@ export const GameStore = create(set => ({
             survivor: state.resources.survivor + amount
         }
     })),
-    consumeMeat: (amount) => set((state) => ({
-        resources: {
-            ...state.resources,
-            meat: Math.max(0, state.resources.meat - amount)
-        }
-    })),
+    consumeMeat: (amount) => set((state) => {
+        console.log('Consuming meat:', amount); // Pour déboguer
+        return {
+            resources: {
+                ...state.resources,
+                meat: Math.max(0, state.resources.meat - amount)
+            }
+        };
+    }),
     updateWood: (amount) => set((state) => ({
         resources: {
             ...state.resources,
