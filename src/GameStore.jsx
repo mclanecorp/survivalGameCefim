@@ -1,4 +1,7 @@
 import {create} from 'zustand';
+import tree2Icon from '/tree2.svg';
+import cabinIcon from '/cabin.svg';
+import mountainIcon from '/mountain.svg';
 
 const INITIAL_RESOURCES = {
     survivor: 0,
@@ -16,15 +19,15 @@ const CELL_TYPES = {
     },
     forest: {
         name: 'Forêt',
-        icon: '/tree2.svg'
+        icon: tree2Icon
     },
     house: {
         name: 'Maison',
-        icon: '/cabin.svg'
+        icon: cabinIcon
     },
     stone: {
         name: 'Pierre',
-        icon: '/mountain.svg'
+        icon: mountainIcon
     }
 };
 
