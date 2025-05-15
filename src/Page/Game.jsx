@@ -20,14 +20,16 @@ export function Game() {
     const setPlayerName = GameStore((state) => state.setPlayerName);
     const resetGame = GameStore((state) => state.resetGame);
     const consumeMeat = GameStore((state) => state.consumeMeat);
+    const produceResources = GameStore((state) => state.produceResources);
+    const map = GameStore((state) => state.map);
 
     useEffect(() => {
-        if ( resources.meat <= 0) {
+        if (resources.meat <= 0) {
             setGameOver(true);
         }
     }, [resources.meat, setGameOver]);
 
-    // Timer combiné pour le temps de survie et la consommation de nourriture
+    // Timer combiné pour le temps de survie, la consommation de nourriture et la production de ressources
     useEffect(() => {
         if (!isGameOver) {
             const survivalTimer = setInterval(() => {
@@ -35,16 +37,24 @@ export function Game() {
             }, 1000);
 
             const foodTimer = setInterval(() => {
-                const foodConsumption = resources.survivor;
-                consumeMeat(foodConsumption);
-            }, 1000);
+                // Calculer le nombre total de survivants sur la carte
+                const totalSurvivorsOnMap = map.reduce((total, row) => {
+                    return total + row.reduce((rowTotal, cell) => rowTotal + (cell.survivors || 0), 0);
+                }, 0);
+                consumeMeat(totalSurvivorsOnMap);
+            }, 10000);
+
+            const resourceTimer = setInterval(() => {
+                produceResources();
+            }, 5000);
 
             return () => {
                 clearInterval(survivalTimer);
                 clearInterval(foodTimer);
+                clearInterval(resourceTimer);
             };
         }
-    }, [isGameOver, gameStartTime, setSurvivedTime, resources.survivor, consumeMeat]);
+    }, [isGameOver, gameStartTime, setSurvivedTime, consumeMeat, produceResources, map]);
 
     const handleRestart = () => {
         resetGame();

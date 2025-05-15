@@ -12,7 +12,7 @@ export function Ressources() {
             <ul className="w-90 flex gap-20 ">
                 <li className="flex ">
                     <img src={survivorIcon} alt="survivor"/>
-                    <span className="mt-2 bg-white rounded flex items-center px-2 m">{resources.survivor}/{resources.survivor}</span>
+                    <span className="mt-2 bg-white rounded flex items-center px-2 m">{resources.survivor}</span>
                 </li>
                 <li className="flex gap-2">
                     <img src={meatIcon} alt="meat"/>

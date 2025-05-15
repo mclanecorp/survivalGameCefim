@@ -5,7 +5,7 @@ import mountainIcon from '/mountain.svg';
 
 const INITIAL_RESOURCES = {
     survivor: 0,
-    meat: 4,
+    meat: 15,
     wood: 10,
     stone: 75
 };
@@ -43,7 +43,10 @@ const initialMap = () => {
             } else if (random < 0.30) {
                 type = 'stone';
             }
-            row.push({type});
+            row.push({
+                type,
+                survivors: 0
+            });
         }
         map.push(row);
     }
@@ -79,14 +82,60 @@ export const GameStore = create(set => ({
             wood: Math.max(0, state.resources.wood + amount)
         }
     })),
+    updateMeat: (amount) => set((state) => ({
+        resources: {
+            ...state.resources,
+            meat: Math.max(0, state.resources.meat + amount)
+        }
+    })),
 
     // Map
     map: initialMap(),
     resetMap: () => set({map: initialMap()}),
     updateCell: (row, col, newType) => set((state) => {
         const newMap = [...state.map];
-        newMap[row][col] = { type: newType };
+        newMap[row][col] = { 
+            type: newType,
+            survivors: newMap[row][col].survivors || 0
+        };
         return { map: newMap };
+    }),
+    addSurvivorToCell: (row, col) => set((state) => {
+        if (state.resources.survivor > 0) {
+            const newMap = [...state.map];
+            newMap[row][col].survivors = (newMap[row][col].survivors || 0) + 1;
+            return { 
+                map: newMap,
+                resources: {
+                    ...state.resources,
+                    survivor: state.resources.survivor - 1
+                }
+            };
+        }
+        return state;
+    }),
+    produceResources: () => set((state) => {
+        const newMap = [...state.map];
+        let totalWood = 0;
+        let totalMeat = 0;
+
+        newMap.forEach(row => {
+            row.forEach(cell => {
+                if (cell.type === 'forest' && cell.survivors > 0) {
+                    totalWood += cell.survivors;
+                    totalMeat += cell.survivors;
+                }
+            });
+        });
+
+        return {
+            map: newMap,
+            resources: {
+                ...state.resources,
+                wood: state.resources.wood + totalWood,
+                meat: state.resources.meat + totalMeat
+            }
+        };
     }),
 
     // Cell
