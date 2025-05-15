@@ -6,13 +6,15 @@ import stoneIcon from '/stone.svg';
 
 export function Ressources() {
     const resources = GameStore((state) => state.resources);
+    const getTotalSurvivors = GameStore((state) => state.getTotalSurvivors);
+    const totalSurvivors = getTotalSurvivors();
 
     return (
         <div className="bg-gray-300 rounded-lg mt-5 mb-5">
             <ul className="w-90 flex gap-20 ">
                 <li className="flex ">
                     <img src={survivorIcon} alt="survivor"/>
-                    <span className="mt-2 bg-white rounded flex items-center px-2 m">{resources.survivor}</span>
+                    <span className="mt-2 bg-white rounded flex items-center px-2 m">{resources.survivor}/{totalSurvivors}</span>
                 </li>
                 <li className="flex gap-2">
                     <img src={meatIcon} alt="meat"/>

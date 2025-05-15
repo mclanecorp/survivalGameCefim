@@ -21,6 +21,7 @@ export function Game() {
     const resetGame = GameStore((state) => state.resetGame);
     const consumeMeat = GameStore((state) => state.consumeMeat);
     const produceResources = GameStore((state) => state.produceResources);
+    const getTotalSurvivors = GameStore((state) => state.getTotalSurvivors);
     const map = GameStore((state) => state.map);
 
     useEffect(() => {
@@ -37,7 +38,8 @@ export function Game() {
             }, 1000);
 
             const foodTimer = setInterval(() => {
-                consumeMeat(resources.survivor);
+                const totalSurvivors = getTotalSurvivors();
+                consumeMeat(totalSurvivors);
             }, 10000);
 
             const resourceTimer = setInterval(() => {
@@ -50,7 +52,7 @@ export function Game() {
                 clearInterval(resourceTimer);
             };
         }
-    }, [isGameOver, gameStartTime, setSurvivedTime, consumeMeat, produceResources, resources.survivor]);
+    }, [isGameOver, gameStartTime, setSurvivedTime, consumeMeat, produceResources, getTotalSurvivors]);
 
     const handleRestart = () => {
         resetGame();

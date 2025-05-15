@@ -71,7 +71,7 @@ export const GameStore = create(set => ({
         }
     })),
     consumeMeat: (amount) => set((state) => {
-        console.log('Consuming meat:', amount); // Pour déboguer
+        console.log('Consuming meat:', amount);
         return {
             resources: {
                 ...state.resources,
@@ -117,6 +117,13 @@ export const GameStore = create(set => ({
         }
         return state;
     }),
+    getTotalSurvivors: () => {
+        const state = GameStore.getState();
+        const survivorsOnMap = state.map.reduce((total, row) => {
+            return total + row.reduce((rowTotal, cell) => rowTotal + (cell.survivors || 0), 0);
+        }, 0);
+        return survivorsOnMap + state.resources.survivor;
+    },
     produceResources: () => set((state) => {
         const newMap = [...state.map];
         let totalWood = 0;
